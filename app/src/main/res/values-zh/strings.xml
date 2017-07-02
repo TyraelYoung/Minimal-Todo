@@ -28,4 +28,6 @@
 
     <string name="snooze">小睡</string>
     <string name="remove">移除</string>
+
+    <string name="todo_error">请输入一条待办事项</string>
 </resources>

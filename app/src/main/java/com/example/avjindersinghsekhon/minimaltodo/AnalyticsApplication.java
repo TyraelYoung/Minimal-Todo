@@ -9,6 +9,8 @@ import com.google.android.gms.analytics.Tracker;
 
 import java.util.Map;
 
+import wang.tyrael.todo.R;
+
 public class AnalyticsApplication extends Application {
 
     private Tracker mTracker;

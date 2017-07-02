@@ -2,6 +2,8 @@ package com.example.avjindersinghsekhon.minimaltodo;
 
 import android.content.res.Resources;
 
+import wang.tyrael.todo.R;
+
 /**
  * Created by avjindersinghsekhon on 9/21/15.
  */

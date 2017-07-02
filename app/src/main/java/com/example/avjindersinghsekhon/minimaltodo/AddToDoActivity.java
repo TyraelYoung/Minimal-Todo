@@ -34,6 +34,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import wang.tyrael.todo.R;
+
 public class AddToDoActivity extends AppCompatActivity implements  DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
     private Date mLastEdited;
     private EditText mToDoTextBodyEditText;

@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import wang.tyrael.todo.R;
+
 public class SettingsActivity extends AppCompatActivity{
 
     AnalyticsApplication app;

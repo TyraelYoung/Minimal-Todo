@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
+import wang.tyrael.todo.R;
 
 public class ReminderActivity extends AppCompatActivity{
     private TextView mtoDoTextTextView;

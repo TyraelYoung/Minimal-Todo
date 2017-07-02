@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
+import wang.tyrael.todo.R;
+
 public class MainActivity extends AppCompatActivity {
     private RecyclerViewEmptySupport mRecyclerView;
     private FloatingActionButton mAddToDoItemFAB;

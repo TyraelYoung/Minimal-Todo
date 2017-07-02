@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import wang.tyrael.todo.R;
+
 public class AboutActivity extends AppCompatActivity {
     private TextView mVersionTextView;
     private String appVersion = "0.1";

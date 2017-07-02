@@ -3,6 +3,8 @@ package com.example.avjindersinghsekhon.minimaltodo;
 import android.content.Context;
 import android.content.res.TypedArray;
 
+import wang.tyrael.todo.R;
+
 
 public class Utils {
 

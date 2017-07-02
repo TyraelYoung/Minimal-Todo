@@ -10,6 +10,8 @@ import android.util.Log;
 
 import java.util.UUID;
 
+import wang.tyrael.todo.R;
+
 public class TodoNotificationService extends IntentService {
     public static final String TODOTEXT = "com.avjindersekhon.todonotificationservicetext";
     public static final String TODOUUID = "com.avjindersekhon.todonotificationserviceuuid";
