@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+    <style name="TodoStyle.DarkTheme" parent="Theme.AppCompat">
+
+        <!--<item name="windowNoTitle">true</item>-->
+        <!--<item name="windowActionBar">false</item>-->
+        <item name="colorAccent">@color/amber</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <!--color of thumb when inactive-->
+        <item name="colorSwitchThumbNormal">@color/grey300</item>
+        <!--Inactive track color-->
+        <item name="android:colorForeground">@color/grey600</item>
+    </style>
+
+
+
+</resources>
