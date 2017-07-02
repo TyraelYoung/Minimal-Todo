@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="wang.tyrael.todo" >
+    package="wang.tyrael.todo">
 
-    <uses-permission android:name="ANDROID.PERMISSION.INTERNET"/>
-    <uses-permission android:name="ANDROID.PERMISSION.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="ANDROID.PERMISSION.INTERNET" />
+    <uses-permission android:name="ANDROID.PERMISSION.ACCESS_NETWORK_STATE" />
 
-    <!--We set theme to DarkTheme because when the app opens it shows
+    <!--
+    We set theme to DarkTheme because when the app opens it shows
     a white screen if our theme here is LightTheme. The screen is shown for
     about 1 second, but it's jarring if users have set Night Mode to true.
     -->
@@ -14,44 +15,45 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/CustomStyle.DarkTheme"
-        >
+        android:theme="@style/CustomStyle.DarkTheme">
         <activity
             android:name="com.example.avjindersinghsekhon.minimaltodo.MainActivity"
+            android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.example.avjindersinghsekhon.minimaltodo.AddToDoActivity"
-            android:screenOrientation="portrait"
+        <activity
+            android:name="com.example.avjindersinghsekhon.minimaltodo.AddToDoActivity"
             android:parentActivityName="com.example.avjindersinghsekhon.minimaltodo.MainActivity"
-            />
-
-        <activity android:name="com.example.avjindersinghsekhon.minimaltodo.AboutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.example.avjindersinghsekhon.minimaltodo.AboutActivity"
             android:label="@string/app_name"
-            android:parentActivityName="com.example.avjindersinghsekhon.minimaltodo.MainActivity"
-            />
+            android:parentActivityName="com.example.avjindersinghsekhon.minimaltodo.MainActivity" />
+        <activity
+            android:name="com.example.avjindersinghsekhon.minimaltodo.ReminderActivity"
+            android:label="@string/app_name" />
 
-        <activity android:name="com.example.avjindersinghsekhon.minimaltodo.ReminderActivity"
-            android:label="@string/app_name"
-            />
+        <service android:name="com.example.avjindersinghsekhon.minimaltodo.TodoNotificationService" />
+        <service android:name="com.example.avjindersinghsekhon.minimaltodo.DeleteNotificationService" />
 
-        <service android:name="com.example.avjindersinghsekhon.minimaltodo.TodoNotificationService"
-            />
-        <service android:name="com.example.avjindersinghsekhon.minimaltodo.DeleteNotificationService"
-            />
-        <activity android:name="com.example.avjindersinghsekhon.minimaltodo.SettingsActivity"
-            android:parentActivityName="com.example.avjindersinghsekhon.minimaltodo.MainActivity"
+        <activity
+            android:name="com.example.avjindersinghsekhon.minimaltodo.SettingsActivity"
+            android:parentActivityName="com.example.avjindersinghsekhon.minimaltodo.MainActivity" />
+        <activity
+            android:name=".activity.Main2Activity"
+            android:label="@string/title_activity_main2">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            />
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
-
 
 </manifest>
