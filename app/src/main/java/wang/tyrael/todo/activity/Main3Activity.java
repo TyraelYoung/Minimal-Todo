@@ -1,7 +1,10 @@
 package wang.tyrael.todo.activity;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -12,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +30,9 @@ public class Main3Activity extends AppCompatActivity
     private int mTheme = -1;
     private String theme = "name_of_the_theme";
 
+    MainFragment mainFragment;
+    DrawerLayout drawer;
+
     public void updateTheme(){
         theme = ThemeBiz.getThemeId();
         mTheme = ThemeBiz.getStyle();
@@ -37,22 +44,29 @@ public class Main3Activity extends AppCompatActivity
         updateTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        mainFragment = MainFragment.newInstance(null, null);
+
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.vMainContainer, MainFragment.newInstance(null, null));
+        ft.replace(R.id.vMainContainer, mainFragment);
         ft.commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //待fragment完成后，设置一下
+        Toolbar toolbar = mainFragment.getToolbar();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
     }
 
     @Override

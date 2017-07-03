@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +69,8 @@ public class MainFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private View rootView;
+    private Toolbar toolbar;
+
     private RecyclerViewEmptySupport mRecyclerView;
     private FloatingActionButton mAddToDoItemFAB;
     private ArrayList<ToDoItem> mToDoItemsArrayList;
@@ -112,6 +115,10 @@ public class MainFragment extends Fragment {
         return fragment;
     }
 
+    public Toolbar getToolbar(){
+        return toolbar;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,8 +140,10 @@ public class MainFragment extends Fragment {
         adapter = new BasicListAdapter(mToDoItemsArrayList);
         new TodoAlarmBiz().setAlarms(mToDoItemsArrayList);
 
-        final android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar)findViewById(R.id.toolbar);
+        toolbar = (android.support.v7.widget.Toolbar)findViewById(R.id.toolbar);
         activity.setSupportActionBar(toolbar);
+
+
 
 
 
