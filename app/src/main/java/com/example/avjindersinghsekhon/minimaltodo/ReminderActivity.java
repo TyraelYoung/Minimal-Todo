@@ -24,6 +24,9 @@ import java.util.UUID;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 import wang.tyrael.todo.R;
+import wang.tyrael.todo.biz.theme.ThemeBiz;
+import wang.tyrael.todo.presenter.MainPresenter;
+import wang.tyrael.todo.service.TodoNotificationService;
 
 public class ReminderActivity extends AppCompatActivity{
     private TextView mtoDoTextTextView;
@@ -36,15 +39,14 @@ public class ReminderActivity extends AppCompatActivity{
     public static final String EXIT = "com.avjindersekhon.exit";
     private TextView mSnoozeTextView;
     String theme;
-    AnalyticsApplication app;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-        app = (AnalyticsApplication)getApplication();
-        app.send(this);
 
-        theme = getSharedPreferences(MainActivity.THEME_PREFERENCES, MODE_PRIVATE).getString(MainActivity.THEME_SAVED, MainActivity.LIGHTTHEME);
-        if(theme.equals(MainActivity.LIGHTTHEME)){
+
+        theme = getSharedPreferences(ThemeBiz.THEME_PREFERENCES, MODE_PRIVATE).getString(ThemeBiz.THEME_SAVED, ThemeBiz.LIGHTTHEME);
+        if(theme.equals(ThemeBiz.LIGHTTHEME)){
             setTheme(R.style.CustomStyle_LightTheme);
         }
         else{
@@ -53,7 +55,7 @@ public class ReminderActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reminder_layout);
         storeRetrieveData = new StoreRetrieveData(this, MainActivity.FILENAME);
-        mToDoItems = MainActivity.getLocallyStoredData(storeRetrieveData);
+        mToDoItems = MainPresenter.getLocallyStoredData(storeRetrieveData);
 
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
 
@@ -79,7 +81,7 @@ public class ReminderActivity extends AppCompatActivity{
 //        mtoDoTextTextView.setBackgroundColor(item.getTodoColor());
         mtoDoTextTextView.setText(mItem.getToDoText());
 
-        if(theme.equals(MainActivity.LIGHTTHEME)){
+        if(theme.equals(ThemeBiz.LIGHTTHEME)){
             mSnoozeTextView.setTextColor(getResources().getColor(R.color.secondary_text));
         }
         else{
@@ -92,7 +94,6 @@ public class ReminderActivity extends AppCompatActivity{
         mRemoveToDoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.send(this, "Action", "Todo Removed from Reminder Activity");
                 mToDoItems.remove(mItem);
                 changeOccurred();
                 saveData();
@@ -138,7 +139,6 @@ public class ReminderActivity extends AppCompatActivity{
     }
 
     private Date addTimeToDate(int mins){
-        app.send(this, "Action", "Snoozed", "For "+mins+" minutes");
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

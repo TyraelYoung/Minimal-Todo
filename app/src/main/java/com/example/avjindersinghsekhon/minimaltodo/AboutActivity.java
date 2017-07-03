@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import wang.tyrael.todo.R;
+import wang.tyrael.todo.biz.theme.ThemeBiz;
 
 public class AboutActivity extends AppCompatActivity {
     private TextView mVersionTextView;
@@ -23,15 +24,14 @@ public class AboutActivity extends AppCompatActivity {
     private TextView contactMe;
     String theme;
 //    private UUID mId;
-    private AnalyticsApplication app;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        app = (AnalyticsApplication)getApplication();
-        app.send(this);
 
-        theme = getSharedPreferences(MainActivity.THEME_PREFERENCES, MODE_PRIVATE).getString(MainActivity.THEME_SAVED, MainActivity.LIGHTTHEME);
-        if(theme.equals(MainActivity.DARKTHEME)){
+
+        theme = getSharedPreferences(ThemeBiz.THEME_PREFERENCES, MODE_PRIVATE).getString(ThemeBiz.THEME_SAVED, ThemeBiz.LIGHTTHEME);
+        if(theme.equals(ThemeBiz.DARKTHEME)){
             Log.d("OskarSchindler", "One");
             setTheme(R.style.CustomStyle_DarkTheme);
         }
@@ -46,7 +46,7 @@ public class AboutActivity extends AppCompatActivity {
         Intent i = getIntent();
 //        mId = (UUID)i.getSerializableExtra(TodoNotificationService.TODOUUID);
 
-        final Drawable backArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material );
+        final Drawable backArrow = getResources().getDrawable(R.drawable.ic_action_back );
         if(backArrow!=null){
             backArrow.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 
@@ -68,7 +68,7 @@ public class AboutActivity extends AppCompatActivity {
         contactMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.send(this, "Action", "Feedback");
+
             }
         });
 

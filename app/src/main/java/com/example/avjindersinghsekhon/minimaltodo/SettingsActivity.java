@@ -11,22 +11,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import wang.tyrael.todo.R;
+import wang.tyrael.todo.biz.theme.ThemeBiz;
 
 public class SettingsActivity extends AppCompatActivity{
 
-    AnalyticsApplication app;
-    @Override
-    protected void onResume() {
-        super.onResume();
-        app.send(this);
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        app = (AnalyticsApplication)getApplication();
-        String theme = getSharedPreferences(MainActivity.THEME_PREFERENCES, MODE_PRIVATE).getString(MainActivity.THEME_SAVED, MainActivity.LIGHTTHEME);
-        if(theme.equals(MainActivity.LIGHTTHEME)){
+        String theme = getSharedPreferences(ThemeBiz.THEME_PREFERENCES, MODE_PRIVATE).getString(ThemeBiz.THEME_SAVED, ThemeBiz.LIGHTTHEME);
+        if(theme.equals(ThemeBiz.LIGHTTHEME)){
             setTheme(R.style.CustomStyle_LightTheme);
         }
         else{
@@ -38,7 +33,7 @@ public class SettingsActivity extends AppCompatActivity{
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final Drawable backArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material );
+        final Drawable backArrow = getResources().getDrawable(R.drawable.ic_action_back );
         if(backArrow!=null){
             backArrow.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 

@@ -7,35 +7,36 @@ import android.preference.CheckBoxPreference;
 import android.preference.PreferenceFragment;
 
 import wang.tyrael.todo.R;
+import wang.tyrael.todo.biz.theme.ThemeBiz;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
-    AnalyticsApplication app;
+
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences_layout);
-        app = (AnalyticsApplication) getActivity().getApplication();
+
    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         PreferenceKeys preferenceKeys = new PreferenceKeys(getResources());
         if(key.equals(preferenceKeys.night_mode_pref_key)){
-            SharedPreferences themePreferences = getActivity().getSharedPreferences(MainActivity.THEME_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences themePreferences = getActivity().getSharedPreferences(ThemeBiz.THEME_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor themeEditor = themePreferences.edit();
             //We tell our MainLayout to recreate itself because mode has changed
-            themeEditor.putBoolean(MainActivity.RECREATE_ACTIVITY, true);
+            themeEditor.putBoolean(ThemeBiz.RECREATE_ACTIVITY, true);
 
             CheckBoxPreference checkBoxPreference = (CheckBoxPreference)findPreference(preferenceKeys.night_mode_pref_key);
             if(checkBoxPreference.isChecked()){
                 //Comment out this line if not using Google Analytics
-                app.send(this, "Settings", "Night Mode used");
-                themeEditor.putString(MainActivity.THEME_SAVED, MainActivity.DARKTHEME);
+
+                themeEditor.putString(ThemeBiz.THEME_SAVED, ThemeBiz.DARKTHEME);
             }
             else{
-                themeEditor.putString(MainActivity.THEME_SAVED, MainActivity.LIGHTTHEME);
+                themeEditor.putString(ThemeBiz.THEME_SAVED, ThemeBiz.LIGHTTHEME);
             }
             themeEditor.apply();
 

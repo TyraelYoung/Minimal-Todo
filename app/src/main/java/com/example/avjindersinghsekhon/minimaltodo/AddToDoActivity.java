@@ -35,6 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import wang.tyrael.todo.R;
+import wang.tyrael.todo.biz.theme.ThemeBiz;
 
 public class AddToDoActivity extends AppCompatActivity implements  DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
     private Date mLastEdited;
@@ -66,26 +67,20 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
     private boolean setTimeButtonClickedOnce = false;
     private LinearLayout mContainerLayout;
     private String theme;
-    AnalyticsApplication app;
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        app.send(this);
-    }
 
     @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        app = (AnalyticsApplication)getApplication();
+
 //        setContentView(R.layout.new_to_do_layout);
         //Need references to these to change them during light/dark mode
         ImageButton reminderIconImageButton;
         TextView reminderRemindMeTextView;
 
 
-        theme = getSharedPreferences(MainActivity.THEME_PREFERENCES, MODE_PRIVATE).getString(MainActivity.THEME_SAVED, MainActivity.LIGHTTHEME);
-        if(theme.equals(MainActivity.LIGHTTHEME)){
+        theme = getSharedPreferences(ThemeBiz.THEME_PREFERENCES, MODE_PRIVATE).getString(ThemeBiz.THEME_SAVED, ThemeBiz.LIGHTTHEME);
+        if(theme.equals(ThemeBiz.LIGHTTHEME)){
             setTheme(R.style.CustomStyle_LightTheme);
             Log.d("OskarSchindler", "Light Theme");
         }
@@ -134,7 +129,7 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
 
         reminderIconImageButton = (ImageButton)findViewById(R.id.userToDoReminderIconImageButton);
         reminderRemindMeTextView = (TextView)findViewById(R.id.userToDoRemindMeTextView);
-        if(theme.equals(MainActivity.DARKTHEME)){
+        if(theme.equals(ThemeBiz.DARKTHEME)){
             reminderIconImageButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_alarm_add_white_24dp));
             reminderRemindMeTextView.setTextColor(Color.WHITE);
         }
@@ -205,13 +200,7 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
         mToDoDateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    app.send(this, "Action", "Reminder Set");
-                }
-                else{
-                    app.send(this, "Action", "Reminder Removed");
 
-                }
 
                 if (!isChecked) {
                     mUserReminderDate = null;
@@ -231,11 +220,9 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
                     mToDoTextBodyEditText.setError(getString(R.string.todo_error));
                 }
                 else if(mUserReminderDate!=null && mUserReminderDate.before(new Date())){
-                    app.send(this, "Action", "Date in the Past");
                     makeResult(RESULT_CANCELED);
                 }
                 else{
-                    app.send(this, "Action", "Make Todo");
                     makeResult(RESULT_OK);
                     finish();
                 }
@@ -268,7 +255,7 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
 
 
                 DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(AddToDoActivity.this, year, month, day);
-                if(theme.equals(MainActivity.DARKTHEME)){
+                if(theme.equals(ThemeBiz.DARKTHEME)){
                     datePickerDialog.setThemeDark(true);
                 }
                 datePickerDialog.show(getFragmentManager(), "DateFragment");
@@ -296,7 +283,7 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
                 int minute = calendar.get(Calendar.MINUTE);
 
                 TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(AddToDoActivity.this, hour, minute, DateFormat.is24HourFormat(AddToDoActivity.this));
-                if(theme.equals(MainActivity.DARKTHEME)){
+                if(theme.equals(ThemeBiz.DARKTHEME)){
                     timePickerDialog.setThemeDark(true);
                 }
                 timePickerDialog.show(getFragmentManager(), "TimeFragment");
@@ -331,7 +318,7 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
 //
 //
 //                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(AddToDoActivity.this, year, month, day);
-//                if(theme.equals(MainActivity.DARKTHEME)){
+//                if(theme.equals(ThemeBiz.DARKTHEME)){
 //                    datePickerDialog.setThemeDark(true);
 //                }
 //                datePickerDialog.show(getFragmentManager(), "DateFragment");
@@ -355,7 +342,7 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
 //                int minute = calendar.get(Calendar.MINUTE);
 //
 //                TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(AddToDoActivity.this, hour, minute, DateFormat.is24HourFormat(AddToDoActivity.this));
-//                if(theme.equals(MainActivity.DARKTHEME)){
+//                if(theme.equals(ThemeBiz.DARKTHEME)){
 //                    timePickerDialog.setThemeDark(true);
 //                }
 //                timePickerDialog.show(getFragmentManager(), "TimeFragment");
@@ -427,7 +414,7 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
     }
 
     private String getThemeSet(){
-        return getSharedPreferences(MainActivity.THEME_PREFERENCES, MODE_PRIVATE).getString(MainActivity.THEME_SAVED, MainActivity.LIGHTTHEME);
+        return getSharedPreferences(ThemeBiz.THEME_PREFERENCES, MODE_PRIVATE).getString(ThemeBiz.THEME_SAVED, ThemeBiz.LIGHTTHEME);
     }
     public void hideKeyboard(EditText et){
 
@@ -580,7 +567,6 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
         switch (item.getItemId()){
             case android.R.id.home:
                 if(NavUtils.getParentActivityName(this)!=null){
-                    app.send(this, "Action", "Discard Todo");
                     makeResult(RESULT_CANCELED);
                     NavUtils.navigateUpFromSameTask(this);
                 }
