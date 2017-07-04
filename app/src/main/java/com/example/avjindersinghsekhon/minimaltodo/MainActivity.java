@@ -74,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+/**
+ * 跟通知activit有冲突？
+ */
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
         if(sharedPreferences.getBoolean(ReminderActivity.EXIT, false)){
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -115,14 +117,15 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(CHANGE_OCCURED, false);
             editor.apply();
-
-
         }
     }
 
 
 
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
         theme = ThemeBiz.getThemeId();
         mTheme = ThemeBiz.getStyle();
         this.setTheme(mTheme);
@@ -329,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
             int bgColor;
             //color of title text in our to-do item. White for night mode, dark gray for day mode
             int todoTextColor;
-            if(theme.equals(LIGHTTHEME)){
+            if( theme.equals(LIGHTTHEME)){
                 bgColor = Color.WHITE;
                 todoTextColor = getResources().getColor(R.color.secondary_text);
             }

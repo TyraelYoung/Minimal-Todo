@@ -3,6 +3,7 @@ package wang.tyrael.todo.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -18,6 +19,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -29,11 +33,13 @@ import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.csmall.android.ApplicationHolder;
+import com.example.avjindersinghsekhon.minimaltodo.AboutActivity;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDoActivity;
 import com.example.avjindersinghsekhon.minimaltodo.CustomRecyclerScrollViewListener;
 import com.example.avjindersinghsekhon.minimaltodo.ItemTouchHelperClass;
 import com.example.avjindersinghsekhon.minimaltodo.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.RecyclerViewEmptySupport;
+import com.example.avjindersinghsekhon.minimaltodo.SettingsActivity;
 import com.example.avjindersinghsekhon.minimaltodo.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.ToDoItem;
 
@@ -43,6 +49,7 @@ import java.util.Collections;
 import wang.tyrael.todo.R;
 import wang.tyrael.todo.biz.TodoAlarmBiz;
 import wang.tyrael.todo.biz.TodoBiz;
+import wang.tyrael.todo.biz.theme.ThemeBiz;
 import wang.tyrael.todo.presenter.MainPresenter;
 import wang.tyrael.todo.service.TodoNotificationService;
 
@@ -122,6 +129,10 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        theme = ThemeBiz.getThemeId();
+        mTheme = ThemeBiz.getStyle();
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -202,6 +213,23 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, Context.MODE_PRIVATE);
+        if(sharedPreferences.getBoolean(CHANGE_OCCURED, false)){
+
+            mToDoItemsArrayList = presenter.loadTodoList();
+            adapter = new BasicListAdapter(mToDoItemsArrayList);
+            mRecyclerView.setAdapter(adapter);
+            new TodoAlarmBiz().setAlarms(mToDoItemsArrayList);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(CHANGE_OCCURED, false);
+            editor.apply();
+        }
+    }
+
     /**
      * 每次离开该页面，数据都可能修改，在这里加载数据，
      * 是否考虑使用总线、监听器等方式？
@@ -209,6 +237,20 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        presenter.persist(mToDoItemsArrayList);
+    }
+
+
+    @Override
+    public void onDestroy() {
+
+        super.onDestroy();
+        mRecyclerView.removeOnScrollListener(customRecyclerScrollViewListener);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -233,6 +275,70 @@ public class MainFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Context context = getActivity();
+        switch (item.getItemId()){
+            case R.id.aboutMeMenuItem:
+                Intent i = new Intent(context, AboutActivity.class);
+                startActivity(i);
+                return true;
+            case R.id.preferences:
+                Intent intent = new Intent(context, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode!= Activity.RESULT_CANCELED && requestCode == REQUEST_ID_TODO_ITEM){
+            ToDoItem item =(ToDoItem) data.getSerializableExtra(TODOITEM);
+            if(item.getToDoText().length()<=0){
+                return;
+            }
+            boolean existed = false;
+
+
+            if(item.hasReminder() && item.getToDoDate()!=null){
+                Intent i = new Intent(getContext(), TodoNotificationService.class);
+                i.putExtra(TodoNotificationService.TODOTEXT, item.getToDoText());
+                i.putExtra(TodoNotificationService.TODOUUID, item.getIdentifier());
+                new TodoAlarmBiz().createAlarm(i, item.getIdentifier().hashCode(), item.getToDoDate().getTime());
+//                Log.d("OskarSchindler", "Alarm Created: "+item.getToDoText()+" at "+item.getToDoDate());
+            }
+
+            for(int i = 0; i<mToDoItemsArrayList.size();i++){
+                if(item.getIdentifier().equals(mToDoItemsArrayList.get(i).getIdentifier())){
+                    mToDoItemsArrayList.set(i, item);
+                    existed = true;
+                    adapter.notifyDataSetChanged();
+                    break;
+                }
+            }
+            if(!existed) {
+                addToDataStore(item);
+            }
+
+
+        }
+    }
+
+    private void addToDataStore(ToDoItem item){
+        mToDoItemsArrayList.add(item);
+        adapter.notifyItemInserted(mToDoItemsArrayList.size() - 1);
+
     }
 
     public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder> implements ItemTouchHelperClass.ItemTouchHelperAdapter{

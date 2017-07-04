@@ -28,6 +28,9 @@ import wang.tyrael.todo.biz.theme.ThemeBiz;
 import wang.tyrael.todo.presenter.MainPresenter;
 import wang.tyrael.todo.service.TodoNotificationService;
 
+/**
+ *  通知处理
+ */
 public class ReminderActivity extends AppCompatActivity{
     private TextView mtoDoTextTextView;
     private Button mRemoveToDoButton;
@@ -176,17 +179,6 @@ public class ReminderActivity extends AppCompatActivity{
         }
     }
 
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        try{
-//            storeRetrieveData.saveToFile(mToDoItems);
-//        }
-//        catch (JSONException | IOException e){
-//            e.printStackTrace();
-//        }
-//    }
-
     private void saveData(){
         try{
             storeRetrieveData.saveToFile(mToDoItems);
@@ -195,15 +187,5 @@ public class ReminderActivity extends AppCompatActivity{
             e.printStackTrace();
         }
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        try{
-//            storeRetrieveData.saveToFile(mToDoItems);
-//        }
-//        catch (JSONException | IOException e){
-//            e.printStackTrace();
-//        }
-    }
+    
 }

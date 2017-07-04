@@ -1,6 +1,7 @@
 package wang.tyrael.todo.activity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -20,12 +21,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.avjindersinghsekhon.minimaltodo.ReminderActivity;
+
 import wang.tyrael.todo.R;
 import wang.tyrael.todo.biz.theme.ThemeBiz;
 import wang.tyrael.todo.fragment.MainFragment;
 
 public class Main3Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainFragment.OnFragmentInteractionListener {
+
+    public static final String SHARED_PREF_DATA_SET_CHANGED = "com.avjindersekhon.datasetchanged";
+    public static final String CHANGE_OCCURED = "com.avjinder.changeoccured";
 
     private int mTheme = -1;
     private String theme = "name_of_the_theme";
@@ -61,12 +67,39 @@ public class Main3Activity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        //TODO 优化逻辑，只执行一次
         //待fragment完成后，设置一下
         Toolbar toolbar = mainFragment.getToolbar();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        /**
+         * 跟通知activit有冲突？
+         */
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
+        if(sharedPreferences.getBoolean(ReminderActivity.EXIT, false)){
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(ReminderActivity.EXIT,false);
+            editor.apply();
+            finish();
+        }
+        /*
+        We need to do this, as this activity's onCreate won't be called when coming back from SettingsActivity,
+        thus our changes to dark/light mode won't take place, as the setContentView() is not called again.
+        So, inside our SettingsFragment, whenever the checkbox's value is changed, in our shared preferences,
+        we mark our recreate_activity key as true.
+
+        Note: the recreate_key's value is changed to false before calling recreate(), or we woudl have ended up in an infinite loop,
+        as onResume() will be called on recreation, which will again call recreate() and so on....
+        and get an ANR
+
+         */
+        if(!ThemeBiz.isChangeHandled()){
+            ThemeBiz.setChangeHandled();
+            recreate();
+        }
     }
 
     @Override
@@ -77,28 +110,6 @@ public class Main3Activity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main3, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
