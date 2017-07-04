@@ -30,6 +30,6 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="笔头是一款简洁的备忘、按时提醒应用。" />
+        android:text="一款简洁的备忘、提醒应用。" />
 
 </LinearLayout>

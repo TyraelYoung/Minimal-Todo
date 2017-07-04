@@ -18,7 +18,7 @@ public class MainProcessInitManager implements IMainProcessInitManager {
     public void onAppCreate(Application app) {
         LibInitData data =new LibInitData();
         data.app = app;
-        data.buglyAppId = "0c7167e53f";
+        data.buglyAppId = "4077ac6992";
         data.mailConfig = new IMailConfig() {
             @Override
             public String getAccount() {

@@ -1,6 +1,7 @@
 package wang.tyrael.todo.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,7 +22,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.avjindersinghsekhon.minimaltodo.AboutActivity;
 import com.example.avjindersinghsekhon.minimaltodo.ReminderActivity;
+import com.example.avjindersinghsekhon.minimaltodo.SettingsActivity;
 
 import wang.tyrael.todo.R;
 import wang.tyrael.todo.biz.theme.ThemeBiz;
@@ -118,18 +121,12 @@ public class Main3Activity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_setting) {
+            Intent i = new Intent(this, AboutActivity.class);
+            startActivity(i);
+        } else if (id == R.id.nav_about) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

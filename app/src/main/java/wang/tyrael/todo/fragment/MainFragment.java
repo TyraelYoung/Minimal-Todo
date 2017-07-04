@@ -129,7 +129,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         theme = ThemeBiz.getThemeId();
         mTheme = ThemeBiz.getStyle();
 
@@ -275,30 +274,6 @@ public class MainFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_main, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Context context = getActivity();
-        switch (item.getItemId()){
-            case R.id.aboutMeMenuItem:
-                Intent i = new Intent(context, AboutActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.preferences:
-                Intent intent = new Intent(context, SettingsActivity.class);
-                startActivity(intent);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
