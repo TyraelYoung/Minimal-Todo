@@ -19,9 +19,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -33,15 +30,16 @@ import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.csmall.android.ApplicationHolder;
-import com.example.avjindersinghsekhon.minimaltodo.AboutActivity;
+import com.csmall.android.ToastUtil;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDoActivity;
 import com.example.avjindersinghsekhon.minimaltodo.CustomRecyclerScrollViewListener;
 import com.example.avjindersinghsekhon.minimaltodo.ItemTouchHelperClass;
 import com.example.avjindersinghsekhon.minimaltodo.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.RecyclerViewEmptySupport;
-import com.example.avjindersinghsekhon.minimaltodo.SettingsActivity;
 import com.example.avjindersinghsekhon.minimaltodo.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.ToDoItem;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,7 +48,8 @@ import wang.tyrael.todo.R;
 import wang.tyrael.todo.biz.TodoAlarmBiz;
 import wang.tyrael.todo.biz.TodoBiz;
 import wang.tyrael.todo.biz.theme.ThemeBiz;
-import wang.tyrael.todo.presenter.MainPresenter;
+import wang.tyrael.todo.eventbus.OperateEvent;
+import wang.tyrael.todo.presenter.main.MainPresenter;
 import wang.tyrael.todo.service.TodoNotificationService;
 
 import static wang.tyrael.todo.biz.theme.ThemeBiz.LIGHTTHEME;
@@ -131,11 +130,7 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         theme = ThemeBiz.getThemeId();
         mTheme = ThemeBiz.getStyle();
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        presenter.connect();
     }
 
     @Override
@@ -185,7 +180,7 @@ public class MainFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
 
-
+//解决滑到底部看不见的问题
         customRecyclerScrollViewListener = new CustomRecyclerScrollViewListener() {
             @Override
             public void show() {
@@ -203,10 +198,50 @@ public class MainFragment extends Fragment {
         mRecyclerView.addOnScrollListener(customRecyclerScrollViewListener);
 
 
-        ItemTouchHelper.Callback callback = new ItemTouchHelperClass(adapter);
-        itemTouchHelper = new ItemTouchHelper(callback);
-        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+//        ItemTouchHelper.Callback callback = new ItemTouchHelperClass(adapter);
+//        itemTouchHelper = new ItemTouchHelper(callback);
+//        itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
+        ItemTouchHelper itemTouchHelper2 = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END |ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                switch(direction){
+                    case ItemTouchHelper.UP:
+                        ToastUtil.show("UP");
+                        break;
+                    case ItemTouchHelper.DOWN:
+                        ToastUtil.show("DOWN");
+                        break;
+                    case ItemTouchHelper.START:
+                        // 左滑删除
+//                        presenter.removeItem(viewHolder.getAdapterPosition());
+                        OperateEvent e = new OperateEvent();
+                        e.typeId = MainPresenter.EVENT_REMOVE;
+                        EventBus.getDefault().post(e);
+                        break;
+                    case ItemTouchHelper.END:
+                        ToastUtil.show("END");
+                        //右滑完成
+                        presenter.setDone(viewHolder.getAdapterPosition());
+                        break;
+
+                }
+            }
+        });
+        itemTouchHelper2.attachToRecyclerView(mRecyclerView);
 
         mRecyclerView.setAdapter(adapter);
         return rootView;
@@ -247,16 +282,9 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-
+        presenter.disconnect();
         super.onDestroy();
         mRecyclerView.removeOnScrollListener(customRecyclerScrollViewListener);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -340,26 +368,19 @@ public class MainFragment extends Fragment {
 
             mJustDeletedToDoItem =  items.remove(position);
             mIndexOfDeletedToDoItem = position;
-            Context context = ApplicationHolder.getApplication();
-            Intent i = new Intent(context,TodoNotificationService.class);
-            new TodoAlarmBiz().deleteAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode());
+
+            new TodoAlarmBiz().deleteAlarm( mJustDeletedToDoItem.getIdentifier().hashCode());
             notifyItemRemoved(position);
 
 //            String toShow = (mJustDeletedToDoItem.getToDoText().length()>20)?mJustDeletedToDoItem.getToDoText().substring(0, 20)+"...":mJustDeletedToDoItem.getToDoText();
-            String toShow = "Todo";
-            Snackbar.make(mCoordLayout, "Deleted "+toShow,Snackbar.LENGTH_SHORT)
-                    .setAction("UNDO", new View.OnClickListener() {
+            String toShow = "事项";
+            Snackbar.make(mCoordLayout, "已删除 "+toShow,Snackbar.LENGTH_LONG)
+                    .setAction("取消删除", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
                             items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
-                            if(mJustDeletedToDoItem.getToDoDate()!=null && mJustDeletedToDoItem.hasReminder()){
-                                Context context = getActivity();
-                                Intent i = new Intent(context, TodoNotificationService.class);
-                                i.putExtra(TodoNotificationService.TODOTEXT, mJustDeletedToDoItem.getToDoText());
-                                i.putExtra(TodoNotificationService.TODOUUID, mJustDeletedToDoItem.getIdentifier());
-                                new TodoAlarmBiz().createAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode(), mJustDeletedToDoItem.getToDoDate().getTime());
-                            }
+                            mJustDeletedToDoItem.checkSetAlarm();
                             notifyItemInserted(mIndexOfDeletedToDoItem);
                         }
                     }).show();

@@ -40,19 +40,46 @@ public class TodoAlarmBiz {
         }
     }
 
+    public void createAlarm(ToDoItem mJustDeletedToDoItem){
+        Context context = ApplicationHolder.getApplication();
+        Intent i = new Intent(context, TodoNotificationService.class);
+        i.putExtra(TodoNotificationService.TODOTEXT, mJustDeletedToDoItem.getToDoText());
+        i.putExtra(TodoNotificationService.TODOUUID, mJustDeletedToDoItem.getIdentifier());
+
+        AlarmManager am = getAlarmManager();
+        int requestCode = mJustDeletedToDoItem.getIdentifier().hashCode();
+        long timeInMillis = mJustDeletedToDoItem.getToDoDate().getTime();
+        PendingIntent pi = PendingIntent.getService(context,requestCode, i, PendingIntent.FLAG_UPDATE_CURRENT);
+        am.set(AlarmManager.RTC_WAKEUP, timeInMillis, pi);
+//        Log.d("OskarSchindler", "createAlarm "+requestCode+" time: "+timeInMillis+" PI "+pi.toString());
+    }
+
     public void createAlarm(Intent i, int requestCode, long timeInMillis){
         AlarmManager am = getAlarmManager();
         PendingIntent pi = PendingIntent.getService(context,requestCode, i, PendingIntent.FLAG_UPDATE_CURRENT);
         am.set(AlarmManager.RTC_WAKEUP, timeInMillis, pi);
 //        Log.d("OskarSchindler", "createAlarm "+requestCode+" time: "+timeInMillis+" PI "+pi.toString());
     }
-    public void deleteAlarm(Intent i, int requestCode){
+
+    public void deleteAlarm(int requestCode){
+        Context context = ApplicationHolder.getApplication();
+        Intent i = new Intent(context,TodoNotificationService.class);
         if(doesPendingIntentExist(i, requestCode)){
             PendingIntent pi = PendingIntent.getService(context, requestCode,i, PendingIntent.FLAG_NO_CREATE);
             pi.cancel();
             getAlarmManager().cancel(pi);
             Log.d("OskarSchindler", "PI Cancelled " + doesPendingIntentExist(i, requestCode));
         }
+    }
+
+
+    /**
+     * @deprecated
+     * @param i
+     * @param requestCode
+     */
+    public void deleteAlarm(Intent i, int requestCode){
+        this.deleteAlarm(requestCode);
     }
 
     private AlarmManager getAlarmManager(){

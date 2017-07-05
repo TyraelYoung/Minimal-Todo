@@ -25,7 +25,7 @@ import java.util.UUID;
 import fr.ganfra.materialspinner.MaterialSpinner;
 import wang.tyrael.todo.R;
 import wang.tyrael.todo.biz.theme.ThemeBiz;
-import wang.tyrael.todo.presenter.MainPresenter;
+import wang.tyrael.todo.presenter.main.MainPresenter;
 import wang.tyrael.todo.service.TodoNotificationService;
 
 /**

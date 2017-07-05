@@ -36,6 +36,9 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs/share')
     testCompile 'junit:junit:4.12'
 
+    //事件总线，完成了通知机制
+    compile 'org.greenrobot:eventbus:3.0.0'
+
     //下载上传组件
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile 'com.google.code.gson:gson:2.7'

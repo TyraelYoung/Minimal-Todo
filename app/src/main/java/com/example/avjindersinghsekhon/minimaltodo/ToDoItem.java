@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
+import wang.tyrael.todo.biz.TodoAlarmBiz;
+
 public class ToDoItem implements Serializable{
     private String mToDoText;
     private boolean mHasReminder;
@@ -14,6 +16,7 @@ public class ToDoItem implements Serializable{
     private int mTodoColor;
     private Date mToDoDate;
     private UUID mTodoIdentifier;
+
     private static final String TODOTEXT = "todotext";
     private static final String TODOREMINDER = "todoreminder";
 //    private static final String TODOLASTEDITED = "todolastedited";
@@ -98,6 +101,12 @@ public class ToDoItem implements Serializable{
 
     public UUID getIdentifier(){
         return mTodoIdentifier;
+    }
+
+    public void checkSetAlarm(){
+        if(this.getToDoDate()!=null && this.hasReminder()){
+            new TodoAlarmBiz().createAlarm(this);
+        }
     }
 }
 

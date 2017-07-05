@@ -1,7 +1,5 @@
 package com.example.avjindersinghsekhon.minimaltodo;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -15,7 +13,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,13 +29,12 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 
 import wang.tyrael.todo.R;
 import wang.tyrael.todo.biz.TodoAlarmBiz;
 import wang.tyrael.todo.biz.TodoBiz;
 import wang.tyrael.todo.biz.theme.ThemeBiz;
-import wang.tyrael.todo.presenter.MainPresenter;
+import wang.tyrael.todo.presenter.main.MainPresenter;
 import wang.tyrael.todo.service.TodoNotificationService;
 
 import static wang.tyrael.todo.biz.theme.ThemeBiz.LIGHTTHEME;
