@@ -15,6 +15,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import wang.tyrael.todo.biz.TodoAlarmBiz;
@@ -47,8 +48,30 @@ public class MainPresenter {
     }
 
     //*********************
-    public void moveItem(int from, int to){
+    public void moveTofirst(int position){
+        moveItem(position, 0);
+    }
 
+    public void moveToLast(int position){
+        moveItem(position, items.size()-1);
+    }
+
+    public void moveItem(int fromPosition, int toPosition){
+        //不仅仅是移动两个元素
+        if(fromPosition<toPosition){
+            for(int i=fromPosition; i<toPosition; i++){
+                Collections.swap(items, i, i+1);
+            }
+        }
+        else{
+            for(int i=fromPosition; i > toPosition; i--){
+                Collections.swap(items, i, i-1);
+            }
+        }
+        adapter.updateData(items);
+        adapter.notifyDataSetChanged();
+        //TODO 从0扔到最后一个，会显示不出来。
+//        adapter.notifyItemMoved(fromPosition, toPosition);
     }
 
     public boolean updateItem(ToDoItem item){

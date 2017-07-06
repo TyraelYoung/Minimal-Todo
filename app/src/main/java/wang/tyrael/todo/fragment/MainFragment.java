@@ -162,17 +162,18 @@ public class MainFragment extends Fragment {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
+                presenter.moveItem(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                return true;
             }
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 switch(direction){
                     case ItemTouchHelper.UP:
-                        ToastUtil.show("UP");
+                        presenter.moveTofirst(viewHolder.getAdapterPosition());
                         break;
                     case ItemTouchHelper.DOWN:
-                        ToastUtil.show("DOWN");
+                        presenter.moveToLast(viewHolder.getAdapterPosition());
                         break;
                     case ItemTouchHelper.START:
                         // 左滑删除
