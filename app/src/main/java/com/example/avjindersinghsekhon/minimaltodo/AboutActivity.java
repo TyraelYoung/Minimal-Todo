@@ -42,9 +42,6 @@ public class AboutActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about_layout);
-        
-        Intent i = getIntent();
-//        mId = (UUID)i.getSerializableExtra(TodoNotificationService.TODOUUID);
 
         final Drawable backArrow = getResources().getDrawable(R.drawable.ic_action_back );
         if(backArrow!=null){
@@ -64,14 +61,6 @@ public class AboutActivity extends AppCompatActivity {
         mVersionTextView.setText(String.format(getResources().getString(R.string.app_version), appVersion));
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         contactMe = (TextView)findViewById(R.id.aboutContactMe);
-
-        contactMe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
 
         setSupportActionBar(toolbar);
         if(getSupportActionBar()!=null){

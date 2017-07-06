@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Minimal</string>
+    <string name="app_name">笔头备忘</string>
 
     <string name="action_settings">设置</string>
     <string name="no_to_dos">任务都完成啦~</string>
@@ -11,8 +11,8 @@
     <string name="remind_date_and_time">设置提醒时间为 %1$s, %2$s %3$s</string>
     <string name="about">关于</string>
     <string name="app_version">版本号: %1$s</string>
-    <string name="contact_me">联系作者</string>
-    <string name="made_by">由Avjinder开发</string>
+    <string name="contact_me">联系我们</string>
+    <string name="made_by">水田科技</string>
     <string name="done_label">完成</string>
     <string name="date_reminder_default">今天</string>
     <string name="date_error_check_again">该提醒时间已设置</string>

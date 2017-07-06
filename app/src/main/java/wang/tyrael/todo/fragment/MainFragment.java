@@ -21,7 +21,9 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.csmall.android.ApplicationHolder;
 import com.csmall.android.ToastUtil;
+import com.csmall.library.statistics.individual.Event;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDoActivity;
 import com.example.avjindersinghsekhon.minimaltodo.CustomRecyclerScrollViewListener;
 import com.example.avjindersinghsekhon.minimaltodo.RecyclerViewEmptySupport;
@@ -29,18 +31,23 @@ import com.example.avjindersinghsekhon.minimaltodo.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.ToDoItem;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import wang.tyrael.todo.R;
 import wang.tyrael.todo.biz.TodoAlarmBiz;
 import wang.tyrael.todo.biz.TodoBiz;
 import wang.tyrael.todo.biz.theme.ThemeBiz;
 import wang.tyrael.todo.eventbus.OperateEvent;
+import wang.tyrael.todo.eventbus.UpdateUiEvent;
 import wang.tyrael.todo.presenter.main.MainPresenter;
 import wang.tyrael.todo.service.TodoNotificationService;
 
 import static wang.tyrael.todo.biz.theme.ThemeBiz.LIGHTTHEME;
 
 public class MainFragment extends Fragment {
+    public static final String EVENT_TO_TODO_DETAIL = "EVENT_TO_TODO_DETAIL";
+
     private View rootView;
     private Toolbar toolbar;
 
@@ -64,6 +71,18 @@ public class MainFragment extends Fragment {
 
     private MainPresenter presenter = new MainPresenter();
 
+    private Object updateEventHandler = new Object(){
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onMessageEvent(UpdateUiEvent event) {
+            switch(event.typeId){
+                case EVENT_TO_TODO_DETAIL:
+                    ToDoItem toDoItem= (ToDoItem) event.data;
+                    toToDoDetail(toDoItem);
+                    break;
+            }
+        };
+    };
+
     public MainFragment() {
         // Required empty public constructor
     }
@@ -82,6 +101,7 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         theme = ThemeBiz.getThemeId();
         mTheme = ThemeBiz.getStyle();
+        EventBus.getDefault().register(updateEventHandler);
     }
 
     @Override
@@ -227,6 +247,7 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        EventBus.getDefault().unregister(updateEventHandler);
         super.onDestroy();
         mRecyclerView.removeOnScrollListener(customRecyclerScrollViewListener);
     }
@@ -259,5 +280,12 @@ public class MainFragment extends Fragment {
 
     private View findViewById(int id){
         return rootView.findViewById(id);
+    }
+
+    private void toToDoDetail(ToDoItem item){
+        Context context = ApplicationHolder.getApplication();
+        Intent i = new Intent(context, AddToDoActivity.class);
+        i.putExtra(TODOITEM, item);
+        startActivityForResult(i, REQUEST_ID_TODO_ITEM);
     }
 }

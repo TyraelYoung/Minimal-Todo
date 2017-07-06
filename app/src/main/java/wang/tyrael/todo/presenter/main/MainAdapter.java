@@ -1,6 +1,7 @@
 package wang.tyrael.todo.presenter.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
@@ -14,10 +15,14 @@ import com.example.avjindersinghsekhon.minimaltodo.AddToDoActivity;
 import com.example.avjindersinghsekhon.minimaltodo.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.ToDoItem;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import wang.tyrael.todo.R;
 import wang.tyrael.todo.biz.theme.ThemeBiz;
+import wang.tyrael.todo.eventbus.UpdateUiEvent;
+import wang.tyrael.todo.fragment.MainFragment;
 
 import static wang.tyrael.todo.biz.theme.ThemeBiz.LIGHTTHEME;
 
@@ -89,6 +94,20 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder> {
             }
             holder.mTimeTextView.setText(timeToShow);
         }
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToDoItem item = items.get(position);
+                UpdateUiEvent event = new UpdateUiEvent();
+                event.typeId = MainFragment.EVENT_TO_TODO_DETAIL;
+                event.data = item;
+                EventBus.getDefault().post(event);
+//                Intent i = new Intent(MainActivity.this, AddToDoActivity.class);
+//                i.putExtra(TODOITEM, item);
+//                startActivityForResult(i, REQUEST_ID_TODO_ITEM);
+            }
+        });
 
 
     }

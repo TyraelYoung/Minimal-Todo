@@ -122,10 +122,10 @@ public class Main3Activity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_setting) {
-            Intent i = new Intent(this, AboutActivity.class);
+            Intent i = new Intent(this, SettingsActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_about) {
-            Intent intent = new Intent(this, SettingsActivity.class);
+            Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
         }
 
