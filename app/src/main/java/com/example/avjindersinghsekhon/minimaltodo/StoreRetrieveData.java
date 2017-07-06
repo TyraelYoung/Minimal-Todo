@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class StoreRetrieveData {
     private Context mContext;
@@ -25,7 +26,7 @@ public class StoreRetrieveData {
         mFileName = filename;
     }
 
-    public static JSONArray toJSONArray(ArrayList<ToDoItem> items) throws JSONException{
+    public static JSONArray toJSONArray(List<ToDoItem> items) throws JSONException{
         JSONArray jsonArray = new JSONArray();
         for(ToDoItem item : items){
             JSONObject jsonObject = item.toJSON();
@@ -34,7 +35,7 @@ public class StoreRetrieveData {
         return  jsonArray;
     }
 
-    public void saveToFile(ArrayList<ToDoItem> items) throws JSONException, IOException{
+    public void saveToFile(List<ToDoItem> items) throws JSONException, IOException{
         FileOutputStream fileOutputStream;
         OutputStreamWriter outputStreamWriter;
         fileOutputStream = mContext.openFileOutput(mFileName, Context.MODE_PRIVATE);

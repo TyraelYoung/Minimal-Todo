@@ -4,13 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,26 +19,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.csmall.android.ApplicationHolder;
 import com.csmall.android.ToastUtil;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDoActivity;
 import com.example.avjindersinghsekhon.minimaltodo.CustomRecyclerScrollViewListener;
-import com.example.avjindersinghsekhon.minimaltodo.ItemTouchHelperClass;
-import com.example.avjindersinghsekhon.minimaltodo.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.RecyclerViewEmptySupport;
 import com.example.avjindersinghsekhon.minimaltodo.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.ToDoItem;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 import wang.tyrael.todo.R;
 import wang.tyrael.todo.biz.TodoAlarmBiz;
@@ -54,35 +40,16 @@ import wang.tyrael.todo.service.TodoNotificationService;
 
 import static wang.tyrael.todo.biz.theme.ThemeBiz.LIGHTTHEME;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MainFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MainFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MainFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
     private View rootView;
     private Toolbar toolbar;
 
     private RecyclerViewEmptySupport mRecyclerView;
     private FloatingActionButton mAddToDoItemFAB;
-    private ArrayList<ToDoItem> mToDoItemsArrayList;
+
     private CoordinatorLayout mCoordLayout;
     public static final String TODOITEM = "com.avjindersinghsekhon.com.avjindersinghsekhon.minimaltodo.MainActivity";
-    private BasicListAdapter adapter;
+
     private static final int REQUEST_ID_TODO_ITEM = 100;
     private ToDoItem mJustDeletedToDoItem;
     private int mIndexOfDeletedToDoItem;
@@ -103,21 +70,8 @@ public class MainFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance(String param1, String param2) {
+    public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -141,9 +95,7 @@ public class MainFragment extends Fragment {
         rootView = inflater.inflate(R.layout.activity_main, container, false);
         TodoBiz.setDataChangeHandled();
 
-        mToDoItemsArrayList =  presenter.loadTodoList();
-        adapter = new BasicListAdapter(mToDoItemsArrayList);
-        new TodoAlarmBiz().setAlarms(mToDoItemsArrayList);
+        presenter.loadTodoList();
 
         toolbar = (android.support.v7.widget.Toolbar)findViewById(R.id.toolbar);
         activity.setSupportActionBar(toolbar);
@@ -227,7 +179,7 @@ public class MainFragment extends Fragment {
                         break;
                     case ItemTouchHelper.START:
                         // 左滑删除
-//                        presenter.removeItem(viewHolder.getAdapterPosition());
+//                        presenter.deleteItem(viewHolder.getAdapterPosition());
                         OperateEvent e = new OperateEvent();
                         e.typeId = MainPresenter.EVENT_REMOVE;
                         EventBus.getDefault().post(e);
@@ -243,7 +195,7 @@ public class MainFragment extends Fragment {
         });
         itemTouchHelper2.attachToRecyclerView(mRecyclerView);
 
-        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(presenter.getAdapter());
         return rootView;
     }
 
@@ -253,10 +205,8 @@ public class MainFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, Context.MODE_PRIVATE);
         if(sharedPreferences.getBoolean(CHANGE_OCCURED, false)){
 
-            mToDoItemsArrayList = presenter.loadTodoList();
-            adapter = new BasicListAdapter(mToDoItemsArrayList);
-            mRecyclerView.setAdapter(adapter);
-            new TodoAlarmBiz().setAlarms(mToDoItemsArrayList);
+            presenter.loadTodoList();
+            mRecyclerView.setAdapter(presenter.getAdapter());
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(CHANGE_OCCURED, false);
@@ -276,7 +226,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        presenter.persist(mToDoItemsArrayList);
+        presenter.persist();
     }
 
 
@@ -287,22 +237,7 @@ public class MainFragment extends Fragment {
         mRecyclerView.removeOnScrollListener(customRecyclerScrollViewListener);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -311,8 +246,6 @@ public class MainFragment extends Fragment {
             if(item.getToDoText().length()<=0){
                 return;
             }
-            boolean existed = false;
-
 
             if(item.hasReminder() && item.getToDoDate()!=null){
                 Intent i = new Intent(getContext(), TodoNotificationService.class);
@@ -322,188 +255,12 @@ public class MainFragment extends Fragment {
 //                Log.d("OskarSchindler", "Alarm Created: "+item.getToDoText()+" at "+item.getToDoDate());
             }
 
-            for(int i = 0; i<mToDoItemsArrayList.size();i++){
-                if(item.getIdentifier().equals(mToDoItemsArrayList.get(i).getIdentifier())){
-                    mToDoItemsArrayList.set(i, item);
-                    existed = true;
-                    adapter.notifyDataSetChanged();
-                    break;
-                }
-            }
-            if(!existed) {
-                addToDataStore(item);
+            if(!presenter.updateItem(item)) {
+                presenter.insertItem(item);
             }
 
 
         }
-    }
-
-    private void addToDataStore(ToDoItem item){
-        mToDoItemsArrayList.add(item);
-        adapter.notifyItemInserted(mToDoItemsArrayList.size() - 1);
-
-    }
-
-    public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder> implements ItemTouchHelperClass.ItemTouchHelperAdapter{
-        private ArrayList<ToDoItem> items;
-
-        @Override
-        public void onItemMoved(int fromPosition, int toPosition) {
-            if(fromPosition<toPosition){
-                for(int i=fromPosition; i<toPosition; i++){
-                    Collections.swap(items, i, i+1);
-                }
-            }
-            else{
-                for(int i=fromPosition; i > toPosition; i--){
-                    Collections.swap(items, i, i-1);
-                }
-            }
-            notifyItemMoved(fromPosition, toPosition);
-        }
-
-        @Override
-        public void onItemRemoved(final int position) {
-
-
-            mJustDeletedToDoItem =  items.remove(position);
-            mIndexOfDeletedToDoItem = position;
-
-            new TodoAlarmBiz().deleteAlarm( mJustDeletedToDoItem.getIdentifier().hashCode());
-            notifyItemRemoved(position);
-
-//            String toShow = (mJustDeletedToDoItem.getToDoText().length()>20)?mJustDeletedToDoItem.getToDoText().substring(0, 20)+"...":mJustDeletedToDoItem.getToDoText();
-            String toShow = "事项";
-            Snackbar.make(mCoordLayout, "已删除 "+toShow,Snackbar.LENGTH_LONG)
-                    .setAction("取消删除", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
-                            mJustDeletedToDoItem.checkSetAlarm();
-                            notifyItemInserted(mIndexOfDeletedToDoItem);
-                        }
-                    }).show();
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_circle_try, parent, false);
-            return new BasicListAdapter.ViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, final int position) {
-            ToDoItem item = items.get(position);
-            //Background color for each to-do item. Necessary for night/day mode
-            int bgColor;
-            //color of title text in our to-do item. White for night mode, dark gray for day mode
-            int todoTextColor;
-            if(theme.equals(LIGHTTHEME)){
-                bgColor = Color.WHITE;
-                todoTextColor = getResources().getColor(R.color.secondary_text);
-            }
-            else{
-                bgColor = Color.DKGRAY;
-                todoTextColor = Color.WHITE;
-            }
-            holder.linearLayout.setBackgroundColor(bgColor);
-
-            if(item.hasReminder() && item.getToDoDate()!=null){
-                holder.mToDoTextview.setMaxLines(1);
-                holder.mTimeTextView.setVisibility(View.VISIBLE);
-//                holder.mToDoTextview.setVisibility(View.GONE);
-            }
-            else{
-                holder.mTimeTextView.setVisibility(View.GONE);
-                holder.mToDoTextview.setMaxLines(2);
-            }
-            holder.mToDoTextview.setText(item.getToDoText());
-            holder.mToDoTextview.setTextColor(todoTextColor);
-
-            TextDrawable myDrawable = TextDrawable.builder().beginConfig()
-                    .textColor(Color.WHITE)
-                    .useFont(Typeface.DEFAULT)
-                    .toUpperCase()
-                    .endConfig()
-                    .buildRound(item.getToDoText().substring(0,1),item.getTodoColor());
-
-//            TextDrawable myDrawable = TextDrawable.builder().buildRound(item.getToDoText().substring(0,1),holder.color);
-            holder.mColorImageView.setImageDrawable(myDrawable);
-            if(item.getToDoDate()!=null){
-                String timeToShow;
-                Context context = ApplicationHolder.getApplication();
-                if(android.text.format.DateFormat.is24HourFormat(context)){
-                    timeToShow = AddToDoActivity.formatDate(MainActivity.DATE_TIME_FORMAT_24_HOUR, item.getToDoDate());
-                }
-                else{
-                    timeToShow = AddToDoActivity.formatDate(MainActivity.DATE_TIME_FORMAT_12_HOUR, item.getToDoDate());
-                }
-                holder.mTimeTextView.setText(timeToShow);
-            }
-
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return items.size();
-        }
-
-        BasicListAdapter(ArrayList<ToDoItem> items){
-
-            this.items = items;
-        }
-
-
-        @SuppressWarnings("deprecation")
-        public class ViewHolder extends RecyclerView.ViewHolder{
-
-            View mView;
-            LinearLayout linearLayout;
-            TextView mToDoTextview;
-            //            TextView mColorTextView;
-            ImageView mColorImageView;
-            TextView mTimeTextView;
-//            int color = -1;
-
-            public ViewHolder(View v){
-                super(v);
-                mView = v;
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Context context = getActivity();
-                        ToDoItem item = items.get(BasicListAdapter.ViewHolder.this.getAdapterPosition());
-                        Intent i = new Intent(context, AddToDoActivity.class);
-                        i.putExtra(TODOITEM, item);
-                        startActivityForResult(i, REQUEST_ID_TODO_ITEM);
-                    }
-                });
-                mToDoTextview = (TextView)v.findViewById(R.id.toDoListItemTextview);
-                mTimeTextView = (TextView)v.findViewById(R.id.todoListItemTimeTextView);
-//                mColorTextView = (TextView)v.findViewById(R.id.toDoColorTextView);
-                mColorImageView = (ImageView)v.findViewById(R.id.toDoListItemColorImageView);
-                linearLayout = (LinearLayout)v.findViewById(R.id.listItemLinearLayout);
-            }
-
-
-        }
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
     private View findViewById(int id){

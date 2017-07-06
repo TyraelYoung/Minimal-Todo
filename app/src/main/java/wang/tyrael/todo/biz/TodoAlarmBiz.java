@@ -11,6 +11,7 @@ import com.example.avjindersinghsekhon.minimaltodo.ToDoItem;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import wang.tyrael.todo.service.TodoNotificationService;
 
@@ -23,7 +24,7 @@ import static android.content.Context.ALARM_SERVICE;
 public class TodoAlarmBiz {
     Context context = ApplicationHolder.getApplication();
 
-    public void setAlarms(ArrayList<ToDoItem> mToDoItemsArrayList){
+    public void setAlarms(List<ToDoItem> mToDoItemsArrayList){
         if(mToDoItemsArrayList!=null){
             for(ToDoItem item : mToDoItemsArrayList){
                 if(item.hasReminder() && item.getToDoDate()!=null){

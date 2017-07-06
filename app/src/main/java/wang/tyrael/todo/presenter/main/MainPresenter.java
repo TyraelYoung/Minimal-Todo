@@ -1,22 +1,10 @@
 package wang.tyrael.todo.presenter.main;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.amulyakhare.textdrawable.TextDrawable;
 import com.csmall.android.ApplicationHolder;
 import com.csmall.android.ToastUtil;
-import com.example.avjindersinghsekhon.minimaltodo.AddToDoActivity;
-import com.example.avjindersinghsekhon.minimaltodo.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.ToDoItem;
 
@@ -29,13 +17,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import wang.tyrael.todo.R;
 import wang.tyrael.todo.biz.TodoAlarmBiz;
-import wang.tyrael.todo.biz.theme.ThemeBiz;
 import wang.tyrael.todo.eventbus.OperateEvent;
-import wang.tyrael.todo.fragment.MainFragment;
-
-import static wang.tyrael.todo.biz.theme.ThemeBiz.LIGHTTHEME;
 
 /**
  * Created by Administrator on 2017/7/2 0002.
@@ -49,7 +32,6 @@ public class MainPresenter {
 
     private List<ToDoItem> items;
 
-
     private StoreRetrieveData storeRetrieveData;
     /**
      * 表格的事情委托给adapter 来处理
@@ -60,7 +42,7 @@ public class MainPresenter {
         public void onMessageEvent(OperateEvent event) {
             switch(event.typeId){
                 case EVENT_REMOVE:
-                    removeItem(0);
+                    deleteItem(0);
                     break;
             }
         };
@@ -68,6 +50,10 @@ public class MainPresenter {
 
     public MainPresenter(){
         storeRetrieveData = new StoreRetrieveData(context, FILENAME);
+    }
+
+    public RecyclerView.Adapter getAdapter(){
+        return adapter;
     }
 
     public void connect(){
@@ -83,13 +69,29 @@ public class MainPresenter {
 
     }
 
-    public void removeItem(int position){
-        ToastUtil.show("removeItem");
-//        ToDoItem mJustDeletedToDoItem =  items.remove(position);
-//        int mIndexOfDeletedToDoItem = position;
-//
-//        new TodoAlarmBiz().deleteAlarm( mJustDeletedToDoItem.getIdentifier().hashCode());
-//        adapter.notifyItemRemoved(position);
+    public boolean updateItem(ToDoItem item){
+        for(int i = 0; i<items.size();i++){
+            if(item.getIdentifier().equals(items.get(i).getIdentifier())){
+                items.set(i, item);
+                adapter.notifyDataSetChanged();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void insertItem(ToDoItem item){
+        items.add(item);
+        adapter.updateData(items);
+        adapter.notifyItemInserted(items.size() - 1);
+    }
+
+    public void deleteItem(int position){
+        ToastUtil.show("deleteItem");
+        ToDoItem mJustDeletedToDoItem =  items.remove(position);
+
+        new TodoAlarmBiz().deleteAlarm( mJustDeletedToDoItem.getIdentifier().hashCode());
+        adapter.notifyItemRemoved(position);
 
 //            String toShow = (mJustDeletedToDoItem.getToDoText().length()>20)?mJustDeletedToDoItem.getToDoText().substring(0, 20)+"...":mJustDeletedToDoItem.getToDoText();
 //        String toShow = "事项";
@@ -112,7 +114,7 @@ public class MainPresenter {
 
     //****************************
 
-    public void persist(ArrayList<ToDoItem> items){
+    public void persist(){
         try {
             storeRetrieveData.saveToFile(items);
         } catch (JSONException e) {
@@ -122,8 +124,10 @@ public class MainPresenter {
         }
     }
 
-    public ArrayList<ToDoItem> loadTodoList(){
-        return MainPresenter.getLocallyStoredData(storeRetrieveData);
+    public List<ToDoItem> loadTodoList(){
+        items = MainPresenter.getLocallyStoredData(storeRetrieveData);
+        new TodoAlarmBiz().setAlarms(items);
+        return items;
     }
 
     public static ArrayList<ToDoItem> getLocallyStoredData(StoreRetrieveData storeRetrieveData){
