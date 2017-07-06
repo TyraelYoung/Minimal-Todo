@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.example.avjindersinghsekhon.minimaltodo.MainActivity;
-import com.example.avjindersinghsekhon.minimaltodo.StoreRetrieveData;
+import wang.tyrael.todo.biz.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.ToDoItem;
 
 import java.util.ArrayList;

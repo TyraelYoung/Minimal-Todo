@@ -63,4 +63,9 @@ public class PreferenceHelper {
         SharedPreferences sp = context.getSharedPreferences(name, Context.MODE_PRIVATE);
         return sp.getBoolean(key, false);
     }
+
+    public boolean getBoolean(String key, boolean defaultValue){
+        SharedPreferences sp = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+        return sp.getBoolean(key, defaultValue);
+    }
 }

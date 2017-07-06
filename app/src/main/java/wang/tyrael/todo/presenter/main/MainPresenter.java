@@ -5,12 +5,9 @@ import android.support.v7.widget.RecyclerView;
 
 import com.csmall.android.ApplicationHolder;
 import com.csmall.android.ToastUtil;
-import com.example.avjindersinghsekhon.minimaltodo.StoreRetrieveData;
+import wang.tyrael.todo.biz.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.ToDoItem;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -19,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 
 import wang.tyrael.todo.biz.TodoAlarmBiz;
-import wang.tyrael.todo.eventbus.OperateEvent;
 
 /**
  * Created by Administrator on 2017/7/2 0002.
