@@ -86,9 +86,9 @@ public class MainPresenter {
     }
 
     public void insertItem(ToDoItem item){
-        items.add(item);
+        items.add(0, item);
         adapter.updateData(items);
-        adapter.notifyItemInserted(items.size() - 1);
+        adapter.notifyItemInserted(0);
     }
 
     public void deleteItem(int position){
