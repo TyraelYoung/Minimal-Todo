@@ -51,13 +51,11 @@ public class MainFragment extends Fragment {
     public static final String TODOITEM = "com.avjindersinghsekhon.com.avjindersinghsekhon.minimaltodo.MainActivity";
 
     private static final int REQUEST_ID_TODO_ITEM = 100;
-    private ToDoItem mJustDeletedToDoItem;
-    private int mIndexOfDeletedToDoItem;
+
     public static final String DATE_TIME_FORMAT_12_HOUR = "MMM d, yyyy  h:mm a";
     public static final String DATE_TIME_FORMAT_24_HOUR = "MMM d, yyyy  k:mm";
     public static final String FILENAME = "todoitems.json";
-    private StoreRetrieveData storeRetrieveData;
-    public ItemTouchHelper itemTouchHelper;
+
     private CustomRecyclerScrollViewListener customRecyclerScrollViewListener;
     public static final String SHARED_PREF_DATA_SET_CHANGED = "com.avjindersekhon.datasetchanged";
     public static final String CHANGE_OCCURED = "com.avjinder.changeoccured";
@@ -84,7 +82,6 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         theme = ThemeBiz.getThemeId();
         mTheme = ThemeBiz.getStyle();
-        presenter.connect();
     }
 
     @Override
@@ -179,10 +176,7 @@ public class MainFragment extends Fragment {
                         break;
                     case ItemTouchHelper.START:
                         // 左滑删除
-//                        presenter.deleteItem(viewHolder.getAdapterPosition());
-                        OperateEvent e = new OperateEvent();
-                        e.typeId = MainPresenter.EVENT_REMOVE;
-                        EventBus.getDefault().post(e);
+                        presenter.deleteItem(viewHolder.getAdapterPosition());
                         break;
                     case ItemTouchHelper.END:
                         ToastUtil.show("END");
@@ -232,7 +226,6 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        presenter.disconnect();
         super.onDestroy();
         mRecyclerView.removeOnScrollListener(customRecyclerScrollViewListener);
     }

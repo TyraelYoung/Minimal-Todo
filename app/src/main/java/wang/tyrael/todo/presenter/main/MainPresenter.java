@@ -25,8 +25,6 @@ import wang.tyrael.todo.eventbus.OperateEvent;
  */
 
 public class MainPresenter {
-    public static final String EVENT_REMOVE = "MainPresenter.EVENT_REMOVE";
-
     public static final String FILENAME = "todoitems.json";
     private static final Context context = ApplicationHolder.getApplication();
 
@@ -37,31 +35,15 @@ public class MainPresenter {
      * 表格的事情委托给adapter 来处理
      */
     private MainAdapter adapter = new MainAdapter();
-    public Object eventHandler = new Object(){
-        @Subscribe(threadMode = ThreadMode.MAIN)
-        public void onMessageEvent(OperateEvent event) {
-            switch(event.typeId){
-                case EVENT_REMOVE:
-                    deleteItem(0);
-                    break;
-            }
-        };
-    };
 
     public MainPresenter(){
         storeRetrieveData = new StoreRetrieveData(context, FILENAME);
+        loadTodoList();
+        adapter.updateData(items);
     }
 
     public RecyclerView.Adapter getAdapter(){
         return adapter;
-    }
-
-    public void connect(){
-        EventBus.getDefault().register(eventHandler);
-    }
-
-    public void disconnect(){
-        EventBus.getDefault().unregister(eventHandler);
     }
 
     //*********************
@@ -87,12 +69,13 @@ public class MainPresenter {
     }
 
     public void deleteItem(int position){
-        ToastUtil.show("deleteItem");
         ToDoItem mJustDeletedToDoItem =  items.remove(position);
 
         new TodoAlarmBiz().deleteAlarm( mJustDeletedToDoItem.getIdentifier().hashCode());
+        adapter.updateData(items);
         adapter.notifyItemRemoved(position);
 
+        ToastUtil.show("已删除");
 //            String toShow = (mJustDeletedToDoItem.getToDoText().length()>20)?mJustDeletedToDoItem.getToDoText().substring(0, 20)+"...":mJustDeletedToDoItem.getToDoText();
 //        String toShow = "事项";
 //        Snackbar.make(mCoordLayout, "已删除 "+toShow,Snackbar.LENGTH_LONG)
@@ -108,7 +91,13 @@ public class MainPresenter {
     }
 
     public void setDone(int position){
+        ToDoItem mJustDeletedToDoItem =  items.remove(position);
 
+        new TodoAlarmBiz().deleteAlarm( mJustDeletedToDoItem.getIdentifier().hashCode());
+        adapter.updateData(items);
+        adapter.notifyItemRemoved(position);
+
+        ToastUtil.show("已完成 ");
     }
 
 

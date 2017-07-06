@@ -31,7 +31,7 @@ import wang.tyrael.todo.biz.theme.ThemeBiz;
 import wang.tyrael.todo.fragment.MainFragment;
 
 public class Main3Activity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MainFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String SHARED_PREF_DATA_SET_CHANGED = "com.avjindersekhon.datasetchanged";
     public static final String CHANGE_OCCURED = "com.avjinder.changeoccured";
@@ -59,7 +59,7 @@ public class Main3Activity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mainFragment = MainFragment.newInstance(null, null);
+        mainFragment = MainFragment.newInstance();
 
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -133,9 +133,5 @@ public class Main3Activity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
+    
 }
