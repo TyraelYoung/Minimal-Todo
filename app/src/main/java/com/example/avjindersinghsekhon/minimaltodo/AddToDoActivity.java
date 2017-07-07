@@ -34,11 +34,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import wang.tyrael.android.CommonIntent;
 import wang.tyrael.todo.R;
 import wang.tyrael.todo.biz.theme.ThemeBiz;
 
 public class AddToDoActivity extends AppCompatActivity implements  DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
     private Date mLastEdited;
+
+    private View vToAlarm;
     private EditText mToDoTextBodyEditText;
     private SwitchCompat mToDoDateSwitch;
 //    private TextView mLastSeenTextView;
@@ -89,8 +92,6 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
         }
 
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_add_to_do);
-        //Testing out a new layout
         setContentView(R.layout.activity_todo_test);
 
         //Show an X in place of <-
@@ -125,6 +126,13 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
             reminderRemindMeTextView.setTextColor(Color.WHITE);
         }
 
+        vToAlarm = findViewById(R.id.layoutToAlarm);
+        vToAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonIntent.activityAlarm(AddToDoActivity.this, mUserToDoItem.getToDoText());
+            }
+        });
 
         mContainerLayout = (LinearLayout)findViewById(R.id.todoReminderAndDateContainerLayout);
         mUserDateSpinnerContainingLinearLayout = (LinearLayout)findViewById(R.id.toDoEnterDateLinearLayout);

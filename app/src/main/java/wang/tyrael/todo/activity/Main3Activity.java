@@ -120,11 +120,12 @@ public class Main3Activity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_setting) {
-            Intent i = new Intent(this, SettingsActivity.class);
-            startActivity(i);
-        } else if (id == R.id.nav_about) {
+//
+//        if (id == R.id.nav_setting) {
+//            Intent i = new Intent(this, SettingsActivity.class);
+//            startActivity(i);
+//        } else
+            if (id == R.id.nav_about) {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
         }

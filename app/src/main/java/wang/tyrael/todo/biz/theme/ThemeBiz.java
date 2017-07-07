@@ -40,18 +40,20 @@ public class ThemeBiz {
     }
 
     public static int getStyle(){
-        String theme = context.getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE).getString(THEME_SAVED, LIGHTTHEME);
-        int mTheme = 0;
-        if(theme.equals(LIGHTTHEME)){
-            mTheme = R.style.CustomStyle_LightTheme;
-        }
-        else{
-            mTheme = R.style.CustomStyle_DarkTheme;
-        }
-        return mTheme;
+        return R.style.CustomStyle_DarkTheme;
+//        String theme = context.getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE).getString(THEME_SAVED, LIGHTTHEME);
+//        int mTheme = 0;
+//        if(theme.equals(LIGHTTHEME)){
+//            mTheme = R.style.CustomStyle_LightTheme;
+//        }
+//        else{
+//            mTheme = R.style.CustomStyle_DarkTheme;
+//        }
+//        return mTheme;
     }
 
     public static String getThemeId(){
-        return context.getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE).getString(THEME_SAVED, LIGHTTHEME);
+        return DARKTHEME;
+//        return context.getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE).getString(THEME_SAVED, LIGHTTHEME);
     }
 }

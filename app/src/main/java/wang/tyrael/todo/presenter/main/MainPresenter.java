@@ -84,7 +84,12 @@ public class MainPresenter {
     public void insertItem(ToDoItem item){
         items.add(0, item);
         adapter.updateData(items);
-        adapter.notifyItemInserted(0);
+        adapter.notifyDataSetChanged();
+
+        // bug 1. 不会自动显示顶部， 2. 第二条跳转有问题，应该adapterposition的问题
+        //adapter.notifyItemInserted(0);
+
+
     }
 
     public void deleteItem(int position){

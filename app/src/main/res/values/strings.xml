@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">笔头备忘</string>
+    <string name="app_introduction">一款简洁的备忘应用。我是笔与纸，随时看一看；而不是闹钟，某时某刻给你一个惊吓。</string>
 
     <string name="action_settings">设置</string>
     <string name="no_to_dos">任务都完成啦~</string>

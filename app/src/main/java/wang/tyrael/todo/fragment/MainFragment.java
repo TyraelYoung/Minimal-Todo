@@ -197,7 +197,6 @@ public class MainFragment extends Fragment {
                         presenter.deleteItem(viewHolder.getAdapterPosition());
                         break;
                     case ItemTouchHelper.END:
-                        ToastUtil.show("END");
                         //右滑完成
                         presenter.setDone(viewHolder.getAdapterPosition());
                         break;
