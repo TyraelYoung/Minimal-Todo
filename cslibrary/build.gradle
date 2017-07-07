@@ -25,6 +25,8 @@ android {
     }
     buildTypes {
         release {
+            //子工程混淆以后，外面就找不到了。
+            //对外开放的接口不能混淆
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

@@ -16,6 +16,3 @@
 #   public *;
 #}
 
--keep public class com.google.** {*;}
--keep public class com.google.android.gms.* { public *; }
--dontwarn com.google.android.gms.**

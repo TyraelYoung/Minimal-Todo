@@ -35,6 +35,7 @@
 -dontwarn java.awt.**
 -dontwarn java.beans.Beans
 -dontwarn javax.security.**
+-dontwarn org.apache.harmony.awt.**
 
 -keep class javamail.** {*;}
 -keep class javax.mail.** {*;}
