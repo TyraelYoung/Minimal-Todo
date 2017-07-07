@@ -51,6 +51,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/todoReminderAndDateContainerLayout"
                 android:layout_weight="1.5"
                 android:layout_width="match_parent"
