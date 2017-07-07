@@ -55,6 +55,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginTop="4dp"
+        android:autoLink="email"
+        android:linksClickable="true"
+        android:text="欢迎加入项目开发，一起聊聊人生。"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 
 
 
