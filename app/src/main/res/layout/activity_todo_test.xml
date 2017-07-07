@@ -28,7 +28,7 @@
                 android:layout_height="0dp">
 
 
-                <com.example.avjindersinghsekhon.minimaltodo.CustomTextInputLayout
+                <android.support.design.widget.TextInputLayout
                     app:hintTextAppearance="@style/FloatingLabelTextAppearance"
                     android:id="@+id/toDoCustomTextInput"
                     android:gravity="center"
@@ -39,7 +39,6 @@
                         android:id="@+id/userToDoEditText"
                         android:hint="@string/title"
                         android:lines="2"
-                        android:inputType="textAutoCorrect|textCapSentences"
                         android:maxLines="3"
                         android:textColor="@color/icons"
                         android:gravity="start|bottom"
@@ -48,7 +47,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                </com.example.avjindersinghsekhon.minimaltodo.CustomTextInputLayout>
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
             <LinearLayout

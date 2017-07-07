@@ -118,15 +118,6 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
         mUserReminderDate = mUserToDoItem.getToDoDate();
         mUserColor = mUserToDoItem.getTodoColor();
 
-
-//        if(mUserToDoItem.getLastEdited()==null) {
-//            mLastEdited = new Date();
-//        }
-//        else{
-//            mLastEdited = mUserToDoItem.getLastEdited();
-//        }
-
-
         reminderIconImageButton = (ImageButton)findViewById(R.id.userToDoReminderIconImageButton);
         reminderRemindMeTextView = (TextView)findViewById(R.id.userToDoRemindMeTextView);
         if(theme.equals(ThemeBiz.DARKTHEME)){
