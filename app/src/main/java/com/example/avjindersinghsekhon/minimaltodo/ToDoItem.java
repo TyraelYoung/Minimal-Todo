@@ -11,7 +11,7 @@ import wang.tyrael.todo.biz.TodoAlarmBiz;
 
 public class ToDoItem implements Serializable{
     private String mToDoText;
-    private boolean mHasReminder;
+    private boolean mHasReminder = false;
 //    private Date mLastEdited;
     private int mTodoColor;
     private Date mToDoDate;
@@ -27,7 +27,7 @@ public class ToDoItem implements Serializable{
 
     public ToDoItem(String todoBody, boolean hasReminder, Date toDoDate){
         mToDoText = todoBody;
-        mHasReminder = hasReminder;
+//        mHasReminder = hasReminder;
         mToDoDate = toDoDate;
         mTodoColor = 1677725;
         mTodoIdentifier = UUID.randomUUID();
@@ -35,7 +35,7 @@ public class ToDoItem implements Serializable{
 
     public ToDoItem(JSONObject jsonObject) throws JSONException{
         mToDoText = jsonObject.getString(TODOTEXT);
-        mHasReminder = jsonObject.getBoolean(TODOREMINDER);
+//        mHasReminder = jsonObject.getBoolean(TODOREMINDER);
         mTodoColor = jsonObject.getInt(TODOCOLOR);
         mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
 
@@ -79,7 +79,7 @@ public class ToDoItem implements Serializable{
     }
 
     public void setHasReminder(boolean mHasReminder) {
-        this.mHasReminder = mHasReminder;
+//        this.mHasReminder = mHasReminder;
     }
 
     public Date getToDoDate() {
