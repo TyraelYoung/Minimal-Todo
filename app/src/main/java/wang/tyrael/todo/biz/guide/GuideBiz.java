@@ -42,7 +42,7 @@ public class GuideBiz {
     public List<ToDoItem> getGuideData(){
         List<ToDoItem> list = new ArrayList<>();
         ToDoItem toDoItem = new ToDoItem();
-        toDoItem.setToDoText("别忘了还信用卡，别忘了预约，别忘了买票等等。用笔头把他们记下来，每天看看还有什么事没做。");
+        toDoItem.setToDoText("别忘了预约、买票、别人欠你的钱！！等等。用笔头把他们记下来，每天看看还有什么事没做。");
         toDoItem.setTodoColor(ColorGenerator.MATERIAL.getRandomColor());
         list.add(toDoItem);
 

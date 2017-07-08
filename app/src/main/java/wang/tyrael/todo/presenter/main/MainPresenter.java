@@ -95,7 +95,6 @@ public class MainPresenter {
     public void deleteItem(int position){
         ToDoItem mJustDeletedToDoItem =  items.remove(position);
 
-        new TodoAlarmBiz().deleteAlarm( mJustDeletedToDoItem.getIdentifier().hashCode());
         adapter.updateData(items);
         adapter.notifyItemRemoved(position);
 
@@ -117,7 +116,6 @@ public class MainPresenter {
     public void setDone(int position){
         ToDoItem mJustDeletedToDoItem =  items.remove(position);
 
-        new TodoAlarmBiz().deleteAlarm( mJustDeletedToDoItem.getIdentifier().hashCode());
         adapter.updateData(items);
         adapter.notifyItemRemoved(position);
 
@@ -139,7 +137,7 @@ public class MainPresenter {
 
     public List<ToDoItem> loadTodoList(){
         items = MainPresenter.getLocallyStoredData(storeRetrieveData);
-        new TodoAlarmBiz().setAlarms(items);
+//        new TodoAlarmBiz().setAlarms(items);
         return items;
     }
 

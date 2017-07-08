@@ -44,17 +44,12 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
     private View vToAlarm;
     private EditText mToDoTextBodyEditText;
     private SwitchCompat mToDoDateSwitch;
-//    private TextView mLastSeenTextView;
     private LinearLayout mUserDateSpinnerContainingLinearLayout;
     private TextView mReminderTextView;
 
     private EditText mDateEditText;
     private EditText mTimeEditText;
-    private String mDefaultTimeOptions12H[];
-    private String mDefaultTimeOptions24H[];
 
-    private Button mChooseDateButton;
-    private Button mChooseTimeButton;
     private ToDoItem mUserToDoItem;
     private FloatingActionButton mToDoSendFloatingActionButton;
     public static final String DATE_FORMAT = "MMM d, yyyy";

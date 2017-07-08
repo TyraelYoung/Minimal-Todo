@@ -258,14 +258,6 @@ public class MainFragment extends Fragment {
                 return;
             }
 
-            if(item.hasReminder() && item.getToDoDate()!=null){
-                Intent i = new Intent(getContext(), TodoNotificationService.class);
-                i.putExtra(TodoNotificationService.TODOTEXT, item.getToDoText());
-                i.putExtra(TodoNotificationService.TODOUUID, item.getIdentifier());
-                new TodoAlarmBiz().createAlarm(i, item.getIdentifier().hashCode(), item.getToDoDate().getTime());
-//                Log.d("OskarSchindler", "Alarm Created: "+item.getToDoText()+" at "+item.getToDoDate());
-            }
-
             if(!presenter.updateItem(item)) {
                 presenter.insertItem(item);
             }
