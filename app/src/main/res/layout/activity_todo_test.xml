@@ -40,7 +40,7 @@
                     <EditText
                         android:id="@+id/userToDoEditText"
                         android:hint="@string/title"
-                        android:lines="2"
+                        android:lines="3"
                         android:maxLines="3"
                         android:textColor="@color/icons"
                         android:gravity="start|bottom"
