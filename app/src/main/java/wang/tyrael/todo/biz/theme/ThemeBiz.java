@@ -39,6 +39,12 @@ public class ThemeBiz {
         editor.apply();
     }
 
+    public static void setTheme(String themeId){
+        SharedPreferences.Editor editor = context.getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE).edit();
+        editor.putString(THEME_SAVED, themeId);
+        editor.apply();
+    }
+
     public static int getStyle(){
         return R.style.CustomStyle_DarkTheme;
 //        String theme = context.getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE).getString(THEME_SAVED, LIGHTTHEME);

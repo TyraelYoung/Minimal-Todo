@@ -8,6 +8,7 @@ import com.csmall.android.IMainProcessInitManager;
 import com.csmall.mail.IMailConfig;
 
 import wang.tyrael.todo.biz.guide.GuideBiz;
+import wang.tyrael.todo.biz.theme.ThemeBiz;
 
 /**
  * Created by wangchao on 2017/4/1.
@@ -44,6 +45,8 @@ public class MainProcessInitManager implements IMainProcessInitManager {
             guideBiz.onFirstUse();
             guideBiz.setUsed();
         }
+
+        ThemeBiz.setTheme(ThemeBiz.DARKTHEME);
     }
 
     @Override

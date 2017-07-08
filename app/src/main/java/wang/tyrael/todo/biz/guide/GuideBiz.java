@@ -47,12 +47,12 @@ public class GuideBiz {
         list.add(toDoItem);
 
         toDoItem = new ToDoItem();
-        toDoItem.setToDoText("试一试：拖动可以交换顺序");
+        toDoItem.setToDoText("试一试：交换顺序：按住拖动");
         toDoItem.setTodoColor(ColorGenerator.MATERIAL.getRandomColor());
         list.add(toDoItem);
 
         toDoItem = new ToDoItem();
-        toDoItem.setToDoText("试一试：按住向右滑，再快速往下扔，可以把某一条仍在列表最后");
+        toDoItem.setToDoText("试一试：置顶：按住略向右滑，再快速往上扔，可以扔到第一条");
         toDoItem.setTodoColor(ColorGenerator.MATERIAL.getRandomColor());
         list.add(toDoItem);
 
