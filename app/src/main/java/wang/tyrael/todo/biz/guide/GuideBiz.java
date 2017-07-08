@@ -47,7 +47,7 @@ public class GuideBiz {
         list.add(toDoItem);
 
         toDoItem = new ToDoItem();
-        toDoItem.setToDoText("试一试：交换顺序：按住拖动");
+        toDoItem.setToDoText("试一试：交换顺序：长按3秒，拖动");
         toDoItem.setTodoColor(ColorGenerator.MATERIAL.getRandomColor());
         list.add(toDoItem);
 
