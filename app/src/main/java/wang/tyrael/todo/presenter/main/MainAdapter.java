@@ -50,7 +50,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder> {
     @Override
     public void onBindViewHolder(final MainViewHolder holder, final int position) {
         String theme = ThemeBiz.getThemeId();
-        ToDoItem item = items.get(position);
+        final ToDoItem item = items.get(position);
         //Background color for each to-do item. Necessary for night/day mode
         int bgColor;
         //color of title text in our to-do item. White for night mode, dark gray for day mode
@@ -95,17 +95,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder> {
             holder.mTimeTextView.setText(timeToShow);
         }
 
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToDoItem item = items.get(position);
                 UpdateUiEvent event = new UpdateUiEvent();
                 event.typeId = MainFragment.EVENT_TO_TODO_DETAIL;
                 event.data = item;
                 EventBus.getDefault().post(event);
-//                Intent i = new Intent(MainActivity.this, AddToDoActivity.class);
-//                i.putExtra(TODOITEM, item);
-//                startActivityForResult(i, REQUEST_ID_TODO_ITEM);
             }
         });
 
